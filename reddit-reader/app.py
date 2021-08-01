@@ -2,10 +2,11 @@
 from config import MongoDataBase
 import praw
 import json
+import os
 
 DB = MongoDataBase()
 
-with open('config.json') as f:
+with open(os.path.dirname(os.path.realpath(__file__))+'\\config.json') as f:
   data = json.load(f)
 
 reddit = praw.Reddit(

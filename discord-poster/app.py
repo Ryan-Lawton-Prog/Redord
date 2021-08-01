@@ -5,6 +5,7 @@ import asyncio
 from prawcore import NotFound
 import praw
 import json
+import os
 
 DB = MongoDataBase()
 
@@ -17,7 +18,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='?', description=description, intents=intents)
 
-with open('config.json') as f:
+with open(os.path.dirname(os.path.realpath(__file__))+'\\config.json') as f:
   data = json.load(f)
 
 reddit = praw.Reddit(
