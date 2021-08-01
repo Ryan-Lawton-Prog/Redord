@@ -133,19 +133,24 @@ async def unsubscribe(ctx, subreddit_name: str, channel_name: str):
     channel_query['SERVER_ID'] = ctx.message.guild.id
 
     subreddit = subreddits.find_one({'name': subreddit_name})
+    channel_removed = False
     if subreddit:
         channels = subreddit['channels']
         for channel in channels:
             try:
                 channel.remove(channel_query)
+                channel_removed = True
             except:
-                await ctx.send("subreddit not subscribed currently")
-                return
+                continue
     else:
         await ctx.send("subreddit not subscribed currently")
         return
 
-    await ctx.send("%s unsubscribed from %s" % (channel_name, subreddit_name))
+    if channel_removed:
+        await ctx.send("%s unsubscribed from %s" % (channel_name, subreddit_name))
+        return
+
+    await ctx.send("subreddit not subscribed currently")
     
 
 bot.run(TOKEN)
