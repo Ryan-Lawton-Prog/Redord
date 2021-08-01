@@ -82,7 +82,7 @@ BOT COMMANDS
 """
 @bot.command()
 async def subscribe(ctx, subreddit_name: str, channel_name: str):
-    print("command",subreddit_name,channel_name)
+    #print("command",subreddit_name,channel_name)
     if not sub_exists(subreddit_name):
         await ctx.send("invalid subreddit")
         return
@@ -133,24 +133,19 @@ async def unsubscribe(ctx, subreddit_name: str, channel_name: str):
     channel_query['SERVER_ID'] = ctx.message.guild.id
 
     subreddit = subreddits.find_one({'name': subreddit_name})
-    channel_removed = False
     if subreddit:
         channels = subreddit['channels']
-        for channel in channels:
-            try:
-                channel.remove(channel_query)
-                channel_removed = True
-            except:
-                continue
+        try:
+            channels.remove(channel_query)
+            subreddits.replace_one({'name': subreddit_name}, {'name': subreddit_name, 'channels': channels})
+        except:
+            await ctx.send("subreddit not subscribed currently")
+            return
     else:
         await ctx.send("subreddit not subscribed currently")
         return
 
-    if channel_removed:
-        await ctx.send("%s unsubscribed from %s" % (channel_name, subreddit_name))
-        return
-
-    await ctx.send("subreddit not subscribed currently")
+    await ctx.send("%s unsubscribed from %s" % (channel_name, subreddit_name))
     
 
 bot.run(TOKEN)
