@@ -69,14 +69,14 @@ async def post_messages():
                     print("%s\n%s\n%s" % (message['title'], message['url'], message['permalink']))
                     discord_channel = bot.get_channel(channel['CHANNEL_ID'])
 
-                    await discord_channel.send("%s\n%s\n%s" % (message['title'], message['url'], message['permalink']))
+                    send_message(discord_channel,message, sub_db)                    
 
-                message['used'] = True
-                sub_db.replace_one({'_id':message['_id']}, message)
-        
         await asyncio.sleep(60) # task runs every 60 seconds
 
-
+async def send_message(discord_channel, message, sub_db):
+    await discord_channel.send("%s\n%s\n%s" % (message['title'], message['url'], message['permalink']))
+    message['used'] = True
+    sub_db.replace_one({'_id':message['_id']}, message)
 
 """
 BOT COMMANDS
