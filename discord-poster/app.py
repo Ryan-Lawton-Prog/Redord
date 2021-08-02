@@ -52,7 +52,6 @@ async def on_ready():
     print(bot.user.id)
     print('------')
     bot.loop.create_task(post_messages())
-    bot.loop.create_task(reset())
 
 async def post_messages():
     #await bot.wait_until_ready()
@@ -76,10 +75,6 @@ async def post_messages():
                 sub_db.replace_one({'_id':message['_id']}, message)
         
         await asyncio.sleep(60) # task runs every 60 seconds
-
-async def reset():
-    await asyncio.sleep(1800)
-    exit()
 
 
 
@@ -152,12 +147,6 @@ async def unsubscribe(ctx, subreddit_name: str, channel_name: str):
         return
 
     await ctx.send("%s unsubscribed from %s" % (channel_name, subreddit_name))
-
-@bot.command()
-@commands.is_owner()
-async def shutdown(context):
-    exit()
-    
 
 while True:
     bot.run(TOKEN)
