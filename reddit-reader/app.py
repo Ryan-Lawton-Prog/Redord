@@ -56,8 +56,11 @@ def check_subs():
             sub_posts.insert_one(post)
             if data_save != None:
                 if submission.subreddit.display_name.lower() in data_save['subs'] and submission.url.split('.')[-1] in data_save['exts']:
-                    save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
-                    urlretrieve(submission.url, save_location)     
+                    file_name = submission.url.split('/')[-1]
+                    if submission.url.split('.')[-1] in data_save:
+                        file_name = file_name.split('.')[0]+data_save[file_name.split('.')[-1]]
+                    save_location = "%s%s" % (data['save_dir'],)
+                    urlretrieve(submission.url, save_location)
 
 while True:
     check_subs()
