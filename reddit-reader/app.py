@@ -3,6 +3,7 @@ from config import MongoDataBase
 import praw
 import json
 import os
+from urllib.request import urlretrieve
 
 DB = MongoDataBase()
 
@@ -18,6 +19,13 @@ reddit = praw.Reddit(
 )
 
 print(reddit.user.me())
+
+extension_list = [
+    'png',
+    'jpg',
+    'jpeg',
+    'gif'
+]
 
 """
 API ENDPOINTS
@@ -45,6 +53,10 @@ def check_subs():
         post['url'] = submission.url
         post['permalink'] = submission.permalink
         post['used'] = False
+
+        if submission.url.split('.')[-1] in extension_list:
+            urlretrieve(submission.url, "%s%s" % (data['save_dir'],submission.url.split('/')[-1]))
+
         if not (sub_posts.find({'title': submission.title, 'url': submission.url}).count() > 0):
             print(submission, submission.subreddit.display_name, submission.title)
             sub_posts.insert_one(post)
