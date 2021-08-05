@@ -58,15 +58,10 @@ async def post_messages():
     while True:
         subreddits = DB.get_collection("subreds")
 
-        print(subreddits)
-
         for subreddit in subreddits.find():
-            print(subreddit)
             sub_db = DB.get_collection(subreddit['name'])
             for message in sub_db.find({'used':False}):
-                print(message)
                 for channel in subreddit['channels']:
-                    print("%s\n%s\n%s" % (message['title'], message['url'], message['permalink']))
                     discord_channel = bot.get_channel(channel['CHANNEL_ID'])
 
                     await discord_channel.send("%s\n%s\n%s" % (message['title'], message['url'], message['permalink']))
@@ -107,7 +102,6 @@ async def subscribe(ctx, subreddit_name: str, channel_name: str):
     if subreddit:
         channels = subreddit['channels']
         channels.append(new_channel)
-        sub = {'name'}
         subreddits.replace_one({'name': subreddit_name}, {'name': subreddit_name, 'channels': channels})
     else:
         channel = {'name': subreddit_name, 'channels': [new_channel]}

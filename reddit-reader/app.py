@@ -10,6 +10,11 @@ DB = MongoDataBase()
 with open(os.path.dirname(os.path.realpath(__file__))+'/config.json') as f:
   data = json.load(f)
 
+data_save = None
+if 'save_conf' in data:
+    with open(data['save_conf']) as f:
+        data_save = json.load(f)
+
 reddit = praw.Reddit(
     user_agent=data['user_agent'],
     client_id=data['client_id'],
@@ -17,15 +22,6 @@ reddit = praw.Reddit(
     username=data['username'],
     password=data['password']
 )
-
-print(reddit.user.me())
-
-extension_list = [
-    'png',
-    'jpg',
-    'jpeg',
-    'gif'
-]
 
 """
 API ENDPOINTS
@@ -54,14 +50,12 @@ def check_subs():
         post['permalink'] = submission.permalink
         post['used'] = False
 
-        if submission.url.split('.')[-1] in extension_list and submission.subreddit.display_name.lower() in data['subs']:
-            save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
-            print(save_location)
-            print(submission.url, save_location)
-            urlretrieve(submission.url, save_location)
+        if data_save != None:
+            if submission.subreddit.display_name.lower() in data_save['subs'] and submission.url.split('.')[-1] in data_save['exts']:
+                save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
+                urlretrieve(submission.url, save_location)        
 
         if not (sub_posts.find({'title': submission.title, 'url': submission.url}).count() > 0):
-            print(submission, submission.subreddit.display_name, submission.title)
             sub_posts.insert_one(post)
 
 while True:
