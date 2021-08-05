@@ -55,7 +55,10 @@ def check_subs():
         post['used'] = False
 
         if submission.url.split('.')[-1] in extension_list:
-            urlretrieve(submission.url, "%s%s" % (data['save_dir'],submission.url.split('/')[-1]))
+            save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
+            print(save_location)
+            print(submission.url, save_location)
+            urlretrieve(submission.url, save_location)
 
         if not (sub_posts.find({'title': submission.title, 'url': submission.url}).count() > 0):
             print(submission, submission.subreddit.display_name, submission.title)
