@@ -54,7 +54,7 @@ def check_subs():
         post['permalink'] = submission.permalink
         post['used'] = False
 
-        if submission.url.split('.')[-1] in extension_list:
+        if submission.url.split('.')[-1] in extension_list and submission.subreddit.display_name.lower() in data['subs']:
             save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
             print(save_location)
             print(submission.url, save_location)
