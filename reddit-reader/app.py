@@ -50,13 +50,14 @@ def check_subs():
         post['permalink'] = submission.permalink
         post['used'] = False
 
-        if data_save != None:
-            if submission.subreddit.display_name.lower() in data_save['subs'] and submission.url.split('.')[-1] in data_save['exts']:
-                save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
-                urlretrieve(submission.url, save_location)        
+           
 
         if not (sub_posts.find({'title': submission.title, 'url': submission.url}).count() > 0):
             sub_posts.insert_one(post)
+            if data_save != None:
+                if submission.subreddit.display_name.lower() in data_save['subs'] and submission.url.split('.')[-1] in data_save['exts']:
+                    save_location = "%s%s" % (data['save_dir'],submission.url.split('/')[-1])
+                    urlretrieve(submission.url, save_location)     
 
 while True:
     check_subs()
