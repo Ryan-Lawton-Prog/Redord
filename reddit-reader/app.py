@@ -59,7 +59,7 @@ def check_subs():
                     file_name = submission.url.split('/')[-1]
                     if submission.url.split('.')[-1] in data_save:
                         file_name = file_name.split('.')[0]+data_save[file_name.split('.')[-1]]
-                    save_location = "%s%s" % (data['save_dir'],)
+                    save_location = "%s%s" % (data['save_dir'],file_name)
                     urlretrieve(submission.url, save_location)
 
 while True:
